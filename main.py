@@ -20,12 +20,12 @@ def read_root():
 # Disease prediction endpoint
 @app.post("/predict_disease")
 def predict_disease(request: DiseasePredictionRequest):
-    return predict_disease(request)
-    # symptoms = request.symptoms
+   # return predict_disease(request)
+     symptoms = request.symptoms
     # For now, we are returning a placeholder prediction
     # In the future, this will be replaced by machine learning model
-    # return {
-      #  "predicted_disease": "Placeholder Disease",
-      #  "symptoms": symptoms,
-      #  "message": "Prediction based on symptoms received"
-    # }
+     return {
+       "predicted_disease": "Placeholder Disease",
+        "symptoms": symptoms,
+        "message": "Prediction based on symptoms received"
+     }
