@@ -13,3 +13,12 @@ class DiseasePredictionRequest(BaseModel):
         if not all(isinstance(symptom, str) and symptom.strip() for symptom in v):
             raise ValueError("All symptoms must me non-empty strings.")
         return v
+    
+    ## Dummy prediction logiC (to be replaced my ML later)
+    def predict_disease(request: DiseasePredictionRequest):
+        symptoms = request.symptoms
+        return {
+            "predicted_disease" : "Placeholder Disease",
+            "symptoms" : symptoms,
+            "message" : "Prediction based on symptoms received"
+        }
