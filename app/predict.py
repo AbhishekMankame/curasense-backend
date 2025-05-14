@@ -23,3 +23,16 @@ def predict_disease(request: DiseasePredictionRequest):
 
     best_match = None
     highest_match_count = 0
+
+    for disease, symptoms in disease_symptom_map.items():
+        matched = len(input_symptoms & {s.lower() for s in symptoms})
+        if matched > highest_match_count:
+            highest_match_count = matched
+            best_match = disease
+
+    return {
+        "predicted_disease" : best_match or "Unknown",
+        "matched_symptom_count" : highest_match_count,
+        "symptoms" : request.symptoms,
+        "message" : "Prediction based on symptom matching"
+    }
