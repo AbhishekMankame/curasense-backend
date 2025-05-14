@@ -19,10 +19,7 @@ class DiseasePredictionRequest(BaseModel):
 
 @router.post("/predict_disease")
 def predict_disease(request: DiseasePredictionRequest):
-    symptoms = request.symptoms
-    # For now, we are returning a placeholder prediction
-    return {
-        "predicted_disease": "Placeholder Disease",
-        "symptoms": symptoms,
-        "message": "Prediction based on symptoms received"
-    }
+    input_symptoms = set(symptom.lower() for symptom in request.symptoms)
+
+    best_match = None
+    highest_match_count = 0
