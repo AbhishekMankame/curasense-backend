@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from dotenv import load_dotenv
-from app import predict_disease, DiseasePredictionRequest # Import the whole predict module
+from app.predict import predict_disease, DiseasePredictionRequest # Import the whole predict module
 import os
 
 # Load environment variables
