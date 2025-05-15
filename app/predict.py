@@ -1,4 +1,4 @@
-from fastapi import ARIRouter
+from fastapi import APIRouter
 from pydantic import BaseModel, validator
 from typing import List
 
