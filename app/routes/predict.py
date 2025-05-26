@@ -1,9 +1,14 @@
+import joblib
 from fastapi import APIRouter
 from pydantic import BaseModel, validator
 from typing import List
-from app import predict  # import the prediction logic module
 
 router = APIRouter()
+
+# Load model and encoders once when this module loads
+clf = joblib.load("model/disease_predictor.pkl")
+mlb = joblib.load("model/symptom_encoder.pkl")
+le = joblib.load("model/disease_label_encoder.pkl")
 
 class DiseasePredictionRequest(BaseModel):
     symptoms: List[str]
@@ -16,12 +21,18 @@ class DiseasePredictionRequest(BaseModel):
             raise ValueError("Each symptom must be a non-empty string.")
         return v
 
-
 @router.post("/predict_disease")
 def predict_disease(request: DiseasePredictionRequest):
-    prediction = predict.run_prediction(request.symptoms)
+    symptoms = request.symptoms
+    # Encode symptoms into multi-hot vector
+    symptom_vector = mlb.transform([symptoms])
+    # Predict encoded disease label
+    pred_label_encoded = clf.predict(symptom_vector)[0]
+    # Decode label to disease name
+    predicted_disease = le.inverse_transform([pred_label_encoded])[0]
+
     return {
-        "predicted_disease": prediction,
-        "symptoms": request.symptoms,
+        "predicted_disease": predicted_disease,
+        "symptoms": symptoms,
         "message": "Prediction based on symptoms received"
     }
