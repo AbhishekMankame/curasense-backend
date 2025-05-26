@@ -1,0 +1,6 @@
+symptoms,disease
+fever;cough,Flu
+headache;fatigue,Migrane
+rash,Allergy
+fever;cough;fatigue,COVID-19
+cough,Bronchitis
