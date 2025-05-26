@@ -11,3 +11,8 @@ Imagine a forest with many trees - each one making its own predictions - and the
 - For each mini-dataset, build a Decision Tree.
 - Trees don't see the entire dataset -> diversity!
 - Trees grown deep (fully grown) -> better memorization of patterns in their mini-dataset.
+
+## 🍃 Making Trees Diverse (Feature Bagging)
+- At each split in the tree, instead of considering all features (symptoms), consider only a random subset.
+- Example: If you have 100 symptoms, maybe consider only 10 at each split.
+- This ensures each tree is unique, reducing overfitting.
