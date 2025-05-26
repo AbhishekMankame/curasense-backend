@@ -1,26 +1,34 @@
 from typing import List
+import joblib
+import os
 
-# Simple dummy mapping of symptoms to disease
-SYMPTOM_DISEASE_MAP = {
-    "fever": ["Flu", "Common Cold", "COVID-19"],
-    "cough": ["Common Cold", "Flu", "Bronchitis"],
-    "headache": ["Migraine", "Flu", "Tension Headache"],
-    "fatigue": ["Anemia", "Flu", "COVID-19"],
-    "rash": ["Allergy", "Chickenpox"],
-    # Add more mappings as needed
-}
+# Load the trained model and encoders
+MODEL_DIR = "model"
+MODEL_FILE = os.path.join(MODEL_DIR, "disease_predictor.pkl")
+SYMPTOM_ENCODER_FILE = os.path.join(MODEL_DIR, "symptom_encoder.pkl")
+DISEASE_LABEL_ENCODER_FILE = os.path.join(MODEL_DIR, "disease_label_encoder.pkl")
+
+clf = joblib.load(MODEL_FILE)
+mlb = joblib.load(SYMPTOM_ENCODER_FILE)
+le = joblib.load(DISEASE_LABEL_ENCODER_FILE)
 
 def run_prediction(symptoms: List[str]) -> str:
-    disease_scores = {}
-
-    for symptom in symptoms:
-        possible_diseases = SYMPTOM_DISEASE_MAP.get(symptom.lower(), [])
-        for disease in possible_diseases:
-            disease_scores[disease] = disease_scores.get(disease, 0) + 1
-
-    if not disease_scores:
-        return "No matching disease found"
+    """
+    Predicts the disease based on input symptoms using the trained RandomForest model.
     
-    # Pick disease with highest score
-    predicted_disease = max(disease_scores, key=disease_scores.get)
+    Args:
+        symptoms (List[str]): List of symptoms as strings.
+    
+    Returns:
+        str: Predicted disease.
+    """
+    # Preprocess the symptoms: convert to multi-hot encoding
+    input_features = mlb.transform([symptoms])
+
+    # Predict the encoded disease label
+    predicted_label_encoded = clf.predict(input_features)[0]
+
+    # Decode the label to get the disease name
+    predicted_disease = le.inverse_transform([predicted_label_encoded])[0]
+
     return predicted_disease
