@@ -24,7 +24,7 @@ print("Encoded labels:", y)
 
 # Train Random Forest classifier
 clf = RandomForestClassifier(n_estimators=100, random_state = 42)
-clf.fit(x,y)
+clf.fit(X,y)
 
 # Create 'model' folder if it doesn't exist
 if not os.path.exists("model"):
